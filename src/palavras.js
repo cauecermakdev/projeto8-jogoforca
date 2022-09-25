@@ -24,4 +24,49 @@ const palavras = [
     "zebra", "zagueiro", "zero", "zoeira", "zodíaco", "zangão", "zepelim", "zinco", "zoológico", "zumbido"
 ]
 
+let palavrasSemCarEsp = [];
+
+function change_special_characters(palavras){
+    let c;
+    let string;
+    palavrasSemCarEsp = palavras.map((n)=> {
+        string = "";
+        for(let i = 0; i< n.length; i++){
+            c = n[i];
+            if(c==="á"){
+                /* console.log(n); */
+                string =  n.replace("á","a");
+                /* console.log(string); */
+            }else if(c==="ã"){
+                string = n.replace("ã","a");
+            }else if(c==="ê"){
+                string = n.replace("ê","e");
+            }else if(c==="é"){
+                string = n.replace("é","e");
+            }else if(c==="í"){
+                string = n.replace("í","i");
+            }else if(c==="ó"){
+                string = n.replace("ó","o");
+            }else if(c=== "ô"){
+                string = n.replace("ô","o");
+            }else if(c==="ú"){
+                string = n.replace("ú","u");
+            }else if(c==="ç"){
+                string =  n.replace("ç","c");
+            }
+        }
+        console.log(string);
+        return string===""?n:string;
+    }
+    );
+
+    console.log(palavrasSemCarEsp);
+}
+
+/* change_special_characters(palavras); */
+
+
+
+
+
 export default palavras

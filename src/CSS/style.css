@@ -93,8 +93,10 @@ button:hover{
 .keyboard div > div{
     width:40px;
     height:40px;
-    background-color: #9faab5;
-    color:rgba(0,0,0,0.5);
+    background-color: #262626;
+    color:white;
+/*     background-color: #9faab5;
+    color:rgba(0,0,0,0.5); */
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     border-radius:9px;
     display: flex;
@@ -103,15 +105,29 @@ button:hover{
     font-weight: 900;
     margin:7px 7px;
 }
+.keyboard div > div.clicked{
+    background-color: #262626;
+    color:white;
+    opacity: 70%;
+}
+
+.keyboard div > div.disable,.keyboard div > div.disable:hover{
+    opacity: 30%;
+}
+
+
 
 .keyboard div > div:hover{
     opacity:0.8;
 }
 
 
-
 .input_class{
     margin-bottom:30px;
+}
+
+.input_class.disable {
+    opacity:0.3;
 }
 
 .input_class input{
@@ -140,7 +156,15 @@ button:hover{
 }
 
 .word{
+    font-weight: 900;
     font-size:30px;
+}
+
+.green{
+    color:#27ae60;
+}
+.red{
+    color:red;
 }
 
 @media (max-width:900px){
