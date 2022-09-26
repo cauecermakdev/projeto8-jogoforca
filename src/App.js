@@ -179,10 +179,10 @@ export default function App() {
     return (
         <React.Fragment>
             <div className="up">
-                <img src={array_forca[erro]} alt="forca" />
+                <img data-identifier="game-image" src={array_forca[erro]} alt="forca" />
                 <div className="right">
-                    <button onClick={() => choose_word_bt(disable, setDisable, setWord, setShowWord,setKeyClickedArray,setErro,setInputValue)}>Escolher Palavra</button>
-                    <span className={wordStyle(erro)} >{word}  {show_word}</span>
+                    <button data-identifier="choose-word" onClick={() => choose_word_bt(disable, setDisable, setWord, setShowWord,setKeyClickedArray,setErro,setInputValue)}>Escolher Palavra</button>
+                    <span data-identifier="word" className={wordStyle(erro)} >{/* {word} */} {show_word}</span>
                 </div>
             </div>
             
@@ -190,7 +190,7 @@ export default function App() {
                 <div className="keyboard">
                     <div>
                         {alphabet.map((letter, index) =>
-                            <div className={`${disable ? "disable" : ""}  ${keyClickedArray.includes(letter) ? "clicked" : ""}`} key={index} onClick={() => !disable ? update_forca(word, show_word, letter,erro) : ""}>
+                            <div data-identifier="letter" className={`${disable ? "disable" : ""}  ${keyClickedArray.includes(letter) ? "clicked" : ""}`} key={index} onClick={() => !disable ? update_forca(word, show_word, letter,erro) : ""}>
                                 {letter.toLocaleUpperCase()}
                             </div>
                         )}
@@ -198,8 +198,8 @@ export default function App() {
                 </div>
                 <div className={`input_class ${disable ? "disable" : ""}`} >
                     <p >Já sei a palavra!</p>
-                    <input type="text" onChange = {e => setInputValue(e.target.value)} value={disable?"":inputValue}/>
-                    <button onClick={()=> inputTry(inputValue,word,end,setErro)}>CHUTAR</button>
+                    <input data-identifier="type-guess" type="text" onChange = {e => setInputValue(e.target.value)} value={disable?"":inputValue}/>
+                    <button  data-identifier="guess-button" onClick={()=> inputTry(inputValue,word,end,setErro)}>CHUTAR</button>
                 </div>
             </div>
         </React.Fragment>
