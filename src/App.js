@@ -16,10 +16,6 @@ import forca6 from "./assets/forca6.png";
 
 const array_forca = [forca0, forca1, forca2, forca3, forca4, forca5, forca6];
 
-let erro = 0;
-let win_game = false;
-let lost_game = false;
-
 function isArraysEqual(word, show_word) {
     let isEqual = true;
     for (let i = 0; i < word.length; i++) {
@@ -69,18 +65,18 @@ function change_special_characters(n) {
 }
 
 
-function clickKey(letter, word, show_word, setDisable,setErro, erro) {
+function clickKey(letter, word, show_word, setDisable,setErro, erro,setLost_game,setWin_game) {
 
-    show_word = word.map((n, i) => (n == letter || show_word[i] === n) ? n : "-");
-    show_word == word ? console.log("igual") : console.log("diferente")
+    show_word = word.map((n, i) => (n === letter || show_word[i] === n) ? n : "-");
+    /* show_word === word ? console.log("igual") : console.log("diferente") */
     
     word.includes(letter) ? erro = erro : setErro(erro+1);
-    erro > 6 ? lost_game = true : lost_game = false;
+    erro > 6 ? setLost_game(true) : setLost_game(false);
 
 
     if (isArraysEqual(word, show_word)) {
         alert("É igual");
-        win_game = true;
+        setWin_game(true);
     }
 
     if (erro >= 5) {
@@ -99,13 +95,13 @@ function randonWord() {
     let wordPlay = palavrasEmbaralhadas[randomNumber];
     /* return wordPlay.split(""); */
 
-    console.log(typeof (wordPlay));//string
-    console.log(typeof (wordPlay.split("")));//objeto
+ /*    console.log(typeof (wordPlay));//string
+    console.log(typeof (wordPlay.split("")));//objeto */
     return change_special_characters(wordPlay).split("");
     //return wordPlay.split("");//return string
 }
 
-function wordStyle(erro) {
+function wordStyle(erro,win_game) {
 
     if (win_game) {
         return "word green";
@@ -117,10 +113,10 @@ function wordStyle(erro) {
 }
 
 
-function choose_word_bt(disable, setDisable, setWord, setShowWord,setKeyClickedArray, setErro,setInputValue) {
+function choose_word_bt(disable, setDisable, setWord, setShowWord,setKeyClickedArray, setErro,setInputValue,setWin_game) {
 
     let wd;
-    win_game = false;
+    setWin_game(false);
     setErro(0);
 
     if (disable) {
@@ -135,22 +131,24 @@ function choose_word_bt(disable, setDisable, setWord, setShowWord,setKeyClickedA
     setInputValue("");
 }
 
-function inputTry(inputValue,word,end,setErro){
+function inputTry(inputValue,word,end,setErro,setWin_game,setLost_game){
     
     //console.log(inputValue);
     //console.log(word);
 
     if(isArraysEqual(word, inputValue.split("")) ){
-        win_game = true;//green word
+        setWin_game(true);//green word
         end();
     }else{
-        lost_game = true;
+        setLost_game(true);
         setErro(6);
         end();
     }
 }
 
 export default function App() {
+    const [win_game , setWin_game ] = React.useState(false);
+    const [lost_game, setLost_game] = React.useState(false);
     const [erro, setErro] = React.useState(0);
     const [keyClickedArray, setKeyClickedArray] = React.useState([]);
     const [disable, setDisable] = React.useState(true);
@@ -160,18 +158,18 @@ export default function App() {
     const [inputValue, setInputValue] = React.useState("");
     
     function end(){
-        console.log("quantas vezes roda varios sets na mesma função?");
+        /* console.log("quantas vezes roda varios sets na mesma função?"); */
         setShowWord(word);
         setDisable(true);
         /* setErro(6); */
     }
 
-    function update_forca(word, show_word, letter,erro) {
-        console.log(erro);
+    function update_forca(word, show_word, letter,erro,setLost_game,setWin_game) {
+        /* console.log(erro); */
         if (!keyClickedArray.includes(letter)) {
-            setShowWord(clickKey(letter, word, show_word, setDisable,setErro,erro));
+            setShowWord(clickKey(letter, word, show_word, setDisable,setErro,erro,setLost_game,setWin_game));
             setKeyClickedArray([...keyClickedArray, letter]);
-            console.log(keyClickedArray);
+            /* console.log(keyClickedArray); */
         }
     }
 
@@ -181,8 +179,8 @@ export default function App() {
             <div className="up">
                 <img data-identifier="game-image" src={array_forca[erro]} alt="forca" />
                 <div className="right">
-                    <button data-identifier="choose-word" onClick={() => choose_word_bt(disable, setDisable, setWord, setShowWord,setKeyClickedArray,setErro,setInputValue)}>Escolher Palavra</button>
-                    <span data-identifier="word" className={wordStyle(erro)} >{/* {word} */} {show_word}</span>
+                    <button data-identifier="choose-word" onClick={() => choose_word_bt(disable, setDisable, setWord, setShowWord,setKeyClickedArray,setErro,setInputValue,setWin_game)}>Escolher Palavra</button>
+                    <span data-identifier="word" className={wordStyle(erro,win_game)} >{/* {word} */} {show_word}</span>
                 </div>
             </div>
             
@@ -190,7 +188,7 @@ export default function App() {
                 <div className="keyboard">
                     <div>
                         {alphabet.map((letter, index) =>
-                            <div data-identifier="letter" className={`${disable ? "disable" : ""}  ${keyClickedArray.includes(letter) ? "clicked" : ""}`} key={index} onClick={() => !disable ? update_forca(word, show_word, letter,erro) : ""}>
+                            <div data-identifier="letter" className={`${disable ? "disable" : ""}  ${keyClickedArray.includes(letter) ? "clicked" : ""}`} key={index} onClick={() => !disable ? update_forca(word, show_word, letter,erro,setLost_game,setWin_game) : ""}>
                                 {letter.toLocaleUpperCase()}
                             </div>
                         )}
@@ -199,7 +197,7 @@ export default function App() {
                 <div className={`input_class ${disable ? "disable" : ""}`} >
                     <p >Já sei a palavra!</p>
                     <input data-identifier="type-guess" type="text" onChange = {e => setInputValue(e.target.value)} value={disable?"":inputValue}/>
-                    <button  data-identifier="guess-button" onClick={()=> inputTry(inputValue,word,end,setErro)}>CHUTAR</button>
+                    <button  data-identifier="guess-button" onClick={()=> inputTry(inputValue,word,end,setErro,setWin_game,setLost_game)}>CHUTAR</button>
                 </div>
             </div>
         </React.Fragment>
